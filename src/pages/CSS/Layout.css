@@ -1,0 +1,67 @@
+.last-section {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+
+  background-color: #ecf0f6;
+}
+
+.last-section svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 160px;
+  transform: rotateY(180deg);
+}
+
+.last-section .shape-fill {
+  fill: #c8c8f4;
+  fill-opacity: 1;
+}
+.last-section-content {
+  position: absolute;
+  display: flex;
+  gap: 90px;
+  transform: rotate(180deg);
+  z-index: 2;
+  left: 20%;
+  display: flex;
+  align-items: center;
+}
+.toho {
+  display: flex;
+  gap: 40px;
+}
+.social-media {
+  display: flex;
+  gap: 50px;
+}
+.social {
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  background-color: #4c4ddc;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: 40%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.simage1 {
+  background-image: url("facebook.png");
+}
+.simage2 {
+  background-image: url("X.png");
+}
+.simage3 {
+  background-image: url("instagram.png");
+}
+.simage4 {
+  background-image: url("linkedin.png");
+}

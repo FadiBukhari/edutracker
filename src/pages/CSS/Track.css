@@ -1,0 +1,94 @@
+.task-calendar-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.calendar-wrapper {
+  margin: 20px 0;
+}
+
+.react-calendar {
+  width: 100%;
+  border: 1px solid #1a1717;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.task-pin {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.has-task {
+  background-color: #cdd1d6;
+  position: relative;
+}
+
+.task-details {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #a2a2a237;
+  border-radius: 8px;
+  border-left: 4px solid #2563eb;
+}
+
+.task-list {
+  margin-top: 30px;
+}
+
+.task-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.task-list li {
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.react-calendar__tile {
+  color: black;
+}
+.task-list li:hover {
+  background-color: #e9ecef;
+}
+
+.react-calendar__tile--now {
+  background-color: #0f1010;
+  color: white;
+}
+
+.react-calendar__tile--active {
+  background-color: #1a517a;
+}
+.react-calendar__navigation__label {
+  color: black;
+}
+
+.react-calendar__navigation button {
+  color: black;
+}
+.task-calendar-container {
+  border: solid 1px #171616;
+  margin: 80px auto;
+}
+.react-calendar__tile--now:hover {
+  background: gray;
+}
+
+.react-calendar__year-view__months__month:hover {
+  color: white;
+  background-color: rgba(0, 0, 0, 0.322) !important;
+}
+.react-calendar__tile--now:enabled:hover {
+  background-color: #0000003c;
+}
