@@ -1,218 +1,121 @@
 import { useState } from "react";
 import { format, parseISO } from "date-fns";
 import "./CSS/AcademicTasks.css"; // Assuming you have a CSS file for styling
+import { useStore, useStoreCategories } from "../useStore";
 const AcademicTasks = () => {
   // State for categories and tasks
-  const [categories, setCategories] = useState([]);
+  const {
+    categories,
+    addCategory,
+    addTask,
+    deleteTask,
+    deleteCategory,
+    toggleTaskCompletion,
+  } = useStoreCategories();
+  const { currentuser } = useStore();
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newTask, setNewTask] = useState({
-    categoryId: "",
     name: "",
     type: "assignment",
-    deadline: format(new Date(), "yyyy-MM-dd"),
+    endDate: format(new Date(), "yyyy-MM-dd"),
   });
   const [activeCategory, setActiveCategory] = useState(null);
   const [filter, setFilter] = useState("all"); // 'all', 'completed', 'pending'
 
   // Add new category
-  const addCategory = () => {
+  const addCategoryTrim = () => {
     if (newCategoryName.trim()) {
       const newCategory = {
         id: Date.now().toString(),
         name: newCategoryName.trim(),
+        tasks: [],
       };
-      setCategories([...categories, newCategory]);
+      addCategory(newCategory);
       setNewCategoryName("");
     }
   };
-
+  console.log(categories[0]?.tasks);
   // Add new task
-  const addTask = () => {
-    if (newTask.name.trim() && newTask.categoryId) {
-      setCategories(
-        categories.map((category) => {
-          if (category.id === newTask.categoryId) {
-            const task = {
-              id: Date.now().toString(),
-              name: newTask.name.trim(),
-              type: newTask.type,
-              deadline: newTask.deadline,
-              completed: false,
-            };
-            return {
-              ...category,
-              tasks: [...(category.tasks || []), task],
-            };
-          }
-          return category;
-        })
-      );
+  const addTaskTrim = () => {
+    if (newTask.name.trim()) {
+      const task = {
+        id: Date.now().toString(),
+        name: newTask.name.trim(),
+        type: newTask.type,
+        endDate: newTask.endDate,
+        status: "pending",
+      };
+      addTask(activeCategory, task);
       setNewTask({
         ...newTask,
         name: "",
-        categoryId: activeCategory || newTask.categoryId,
       });
     }
   };
-
-  // Toggle task completion
-  const toggleTaskCompletion = (categoryId, taskId) => {
-    setCategories(
-      categories.map((category) => {
-        if (category.id === categoryId) {
-          return {
-            ...category,
-            tasks: category.tasks?.map((task) =>
-              task.id === taskId
-                ? { ...task, completed: !task.completed }
-                : task
-            ),
-          };
-        }
-        return category;
-      })
-    );
+  const handleDeleteCategory = (categoryId) => {
+    deleteCategory(categoryId);
+    if (activeCategory === categoryId) {
+      setActiveCategory(null);
+    }
   };
-
-  // Delete task
-  const deleteTask = (categoryId, taskId) => {
-    setCategories(
-      categories.map((category) => {
-        if (category.id === categoryId) {
-          return {
-            ...category,
-            tasks: category.tasks?.filter((task) => task.id !== taskId),
-          };
-        }
-        return category;
-      })
-    );
-  };
-
-  // Delete category
-  const deleteCategory = (categoryId) => {
-    setCategories(categories.filter((category) => category.id !== categoryId));
-  };
-
   // Filter tasks based on completion status
   const filteredTasks = (tasks) => {
     if (!tasks) return [];
     switch (filter) {
       case "completed":
-        return tasks.filter((task) => task.completed);
+        return tasks.filter((task) => task.status === "completed");
       case "pending":
-        return tasks.filter((task) => !task.completed);
+        return tasks.filter((task) => task.status === "pending");
       default:
         return tasks;
     }
   };
-
+  const category = categories.find(
+    (category) => activeCategory === category.id
+  );
   return (
-    <div className="academic-task-manager">
-      <h2>Academic Task Manager</h2>
+    <>
+      {currentuser?.role === "parent" ? (
+        <div className="academic-task-viewer">
+          <h2>Academic Task Viewer</h2>
 
-      {/* Category Management */}
-      <div className="category-section">
-        <h3>Categories</h3>
-        <div className="add-category">
-          <input
-            type="text"
-            value={newCategoryName}
-            onChange={(e) => setNewCategoryName(e.target.value)}
-            placeholder="New category name"
-          />
-          <button onClick={addCategory}>Add Category</button>
-        </div>
+          {/* Category Management */}
+          <div className="category-section">
+            <h3>Categories</h3>
 
-        <div className="category-list">
-          {categories.map((category) => (
-            <div
-              key={category.id}
-              className={`category-item ${
-                activeCategory === category.id ? "active" : ""
-              }`}
-              onClick={() => setActiveCategory(category.id)}
-            >
-              <span>{category.name}</span>
-              <button
-                className="delete-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deleteCategory(category.id);
-                }}
-              >
-                ×
-              </button>
+            <div className="category-list">
+              {categories.map((category) => (
+                <div
+                  key={category.id}
+                  className={`category-item ${
+                    activeCategory === category.id ? "active" : ""
+                  }`}
+                  onClick={() => setActiveCategory(category.id)}
+                >
+                  <span>{category.name}</span>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
 
-      {/* Task Management */}
-      <div className="task-section">
-        <h3>Tasks</h3>
-        <div className="task-controls">
-          <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <option value="all">All Tasks</option>
-            <option value="completed">Completed</option>
-            <option value="pending">Pending</option>
-          </select>
+          {/* Task Management */}
 
-          {categories.length > 0 && (
-            <div className="add-task">
-              <select
-                value={newTask.categoryId}
-                onChange={(e) =>
-                  setNewTask({ ...newTask, categoryId: e.target.value })
-                }
-              >
-                <option value="">Select Category</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
+          {activeCategory && (
+            <div className="task-section">
+              <h3>Tasks</h3>
 
-              <input
-                type="text"
-                value={newTask.name}
-                onChange={(e) =>
-                  setNewTask({ ...newTask, name: e.target.value })
-                }
-                placeholder="Task name"
-              />
+              <div className="task-controls">
+                <select
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value)}
+                >
+                  <option value="all">All Tasks</option>
+                  <option value="completed">Completed</option>
+                  <option value="pending">Pending</option>
+                </select>
+              </div>
 
-              <select
-                value={newTask.type}
-                onChange={(e) =>
-                  setNewTask({ ...newTask, type: e.target.value })
-                }
-              >
-                <option value="assignment">Assignment</option>
-                <option value="exam">Exam</option>
-                <option value="project">Project</option>
-                <option value="reading">Reading</option>
-              </select>
-
-              <input
-                type="date"
-                value={newTask.deadline}
-                onChange={(e) =>
-                  setNewTask({ ...newTask, deadline: e.target.value })
-                }
-              />
-
-              <button onClick={addTask}>Add Task</button>
-            </div>
-          )}
-        </div>
-
-        {/* Task List */}
-        <div className="task-list">
-          {categories.map(
-            (category) =>
-              (activeCategory === null || activeCategory === category.id) && (
+              <div className="task-list">
                 <div key={category.id} className="category-tasks">
                   <h4>{category.name}</h4>
                   {filteredTasks(category.tasks)?.length > 0 ? (
@@ -220,11 +123,142 @@ const AcademicTasks = () => {
                       {filteredTasks(category.tasks).map((task) => (
                         <li
                           key={task.id}
-                          className={task.completed ? "completed" : ""}
+                          className={
+                            task.status === "completed"
+                              ? "completed"
+                              : "pending"
+                          }
+                        >
+                          <div className="task-info">
+                            <span className="task-name">{task.name}</span>
+                            <span className="task-type">{task.type}</span>
+                            <span className="task-endDate">
+                              Due:{" "}
+                              {format(parseISO(task.endDate), "MMM dd, yyyy")}
+                            </span>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No tasks in this category</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="academic-task-manager">
+          <h2>Academic Task Manager</h2>
+
+          {/* Category Management */}
+          <div className="category-section">
+            <h3>Categories</h3>
+            <div className="add-category">
+              <input
+                type="text"
+                value={newCategoryName}
+                onChange={(e) => setNewCategoryName(e.target.value)}
+                placeholder="New category name"
+              />
+              <button onClick={addCategoryTrim}>Add Category</button>
+            </div>
+
+            <div className="category-list">
+              {categories.map((category) => (
+                <div
+                  key={category.id}
+                  className={`category-item ${
+                    activeCategory === category.id ? "active" : ""
+                  }`}
+                  onClick={() => setActiveCategory(category.id)}
+                >
+                  <span>{category.name}</span>
+                  <button
+                    className="delete-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteCategory(category.id);
+                    }}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Task Management */}
+
+          {activeCategory && (
+            <div className="task-section">
+              <h3>Tasks</h3>
+
+              <div className="task-controls">
+                <select
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value)}
+                >
+                  <option value="all">All Tasks</option>
+                  <option value="completed">Completed</option>
+                  <option value="pending">Pending</option>
+                </select>
+
+                {categories.length > 0 && (
+                  <div className="add-task">
+                    <input
+                      type="text"
+                      value={newTask.name}
+                      onChange={(e) =>
+                        setNewTask({ ...newTask, name: e.target.value })
+                      }
+                      placeholder="Task name"
+                    />
+
+                    <select
+                      value={newTask.type}
+                      onChange={(e) =>
+                        setNewTask({ ...newTask, type: e.target.value })
+                      }
+                    >
+                      <option value="assignment">Assignment</option>
+                      <option value="exam">Exam</option>
+                      <option value="project">Project</option>
+                      <option value="reading">Reading</option>
+                    </select>
+
+                    <input
+                      type="date"
+                      value={newTask.endDate}
+                      onChange={(e) =>
+                        setNewTask({ ...newTask, endDate: e.target.value })
+                      }
+                    />
+
+                    <button onClick={addTaskTrim}>Add Task</button>
+                  </div>
+                )}
+              </div>
+
+              {/* Task List */}
+              <div className="task-list">
+                <div key={category.id} className="category-tasks">
+                  <h4>{category.name}</h4>
+                  {filteredTasks(category.tasks)?.length > 0 ? (
+                    <ul>
+                      {filteredTasks(category.tasks).map((task) => (
+                        <li
+                          key={task.id}
+                          className={
+                            task.status === "completed"
+                              ? "completed"
+                              : "pending"
+                          }
                         >
                           <input
                             type="checkbox"
-                            checked={task.completed}
+                            checked={task.status === "completed"}
                             onChange={() =>
                               toggleTaskCompletion(category.id, task.id)
                             }
@@ -232,9 +266,9 @@ const AcademicTasks = () => {
                           <div className="task-info">
                             <span className="task-name">{task.name}</span>
                             <span className="task-type">{task.type}</span>
-                            <span className="task-deadline">
+                            <span className="task-endDate">
                               Due:{" "}
-                              {format(parseISO(task.deadline), "MMM dd, yyyy")}
+                              {format(parseISO(task.endDate), "MMM dd, yyyy")}
                             </span>
                           </div>
                           <button
@@ -250,11 +284,12 @@ const AcademicTasks = () => {
                     <p>No tasks in this category</p>
                   )}
                 </div>
-              )
+              </div>
+            </div>
           )}
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

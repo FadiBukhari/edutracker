@@ -14,12 +14,13 @@
   align-items: center;
 }
 .link {
+  font-weight: bold;
   text-decoration: none;
   outline: none;
 }
 
 .link:visited {
-  color: none;
+  color: black;
 }
 .nav-logo {
   cursor: pointer;

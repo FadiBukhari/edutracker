@@ -1,12 +1,15 @@
-.academic-task-manager {
+.academic-task-manager,
+.academic-task-viewer {
   font-family: Arial, sans-serif;
   max-width: 800px;
-  margin: 150px auto;
+  margin: 232px auto;
   border: solid 1px #171616;
   border-radius: 10px;
   padding: 60px;
 }
-
+.academic-task-viewer {
+  text-align: center;
+}
 .category-section,
 .task-section {
   margin-bottom: 20px;

@@ -1,34 +1,7 @@
-import React, { useEffect } from "react";
 import "./CSS/Home.css";
 import { Link } from "react-router";
-import { format } from "date-fns";
-import useStore from "../useStore";
 
 const Home = () => {
-  const { user, updateUser } = useStore();
-  console.log(user);
-  useEffect(() => {
-    const savedUser = JSON.parse(localStorage.getItem("user"));
-    const demo = {
-      name: "Ahmad",
-      email: "demon@demo.com",
-      password: "1234",
-      Tasks: [
-        {
-          id: 1,
-          task: "Task1",
-          type: "assignment",
-          endDate: format(new Date(), "yyyy-MM-dd"),
-          status: "pending",
-        },
-      ],
-    };
-    if (!savedUser) {
-      localStorage.setItem("user", JSON.stringify(demo));
-      // {name:"Ahmad",email:"demon@demo.com",password:"1234",Tasks:[{id:1,task:"Task1",type:"assignment",endDate:date,status:"pending"}]},
-    }
-    updateUser(savedUser ? JSON.parse(savedUser) : demo);
-  }, [updateUser]);
   return (
     <section className="home-container">
       <div className="home-content">

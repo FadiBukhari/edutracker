@@ -2,37 +2,40 @@ import React, { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./CSS/Track.css";
-
-// Sample tasks array with end dates
-const sampleTasks = [
-  { id: 1, name: "Project Proposal", endDate: new Date(2025, 4, 15) },
-  { id: 2, name: "Client Meeting", endDate: new Date(2025, 4, 18) },
-  { id: 3, name: "Code Review", endDate: new Date(2025, 4, 20) },
-  { id: 4, name: "Deployment", endDate: new Date(2025, 4, 25) },
-  { id: 5, name: "Team Retrospective", endDate: new Date(2025, 4, 30) },
-];
+import { useStoreCategories } from "../useStore";
 
 const Track = () => {
+  const { categories } = useStoreCategories();
   const [date, setDate] = useState(new Date());
   const [selectedTask, setSelectedTask] = useState(null);
+  const Tasks = categories
+    .flatMap((category) => category.tasks)
+    .filter((task) => task.status === "pending");
 
   // Get first day of current month
   const currentMonthStart = new Date();
   currentMonthStart.setDate(1);
   currentMonthStart.setHours(0, 0, 0, 0);
 
+  // Improved date comparison function
+  const isSameDate = (date1, date2) => {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    return (
+      d1.getFullYear() === d2.getFullYear() &&
+      d1.getMonth() === d2.getMonth() &&
+      d1.getDate() === d2.getDate()
+    );
+  };
+
   // Check if a date has any tasks ending on it
   const hasTaskEnding = (date) => {
-    return sampleTasks.some(
-      (task) => task.endDate.toDateString() === date.toDateString()
-    );
+    return Tasks.some((task) => isSameDate(task.endDate, date));
   };
 
   // Get all tasks ending on a specific date
   const getTasksForDate = (date) => {
-    return sampleTasks.filter(
-      (task) => task.endDate.toDateString() === date.toDateString()
-    );
+    return Tasks.filter((task) => isSameDate(task.endDate, date));
   };
 
   // Custom tile content for the calendar
@@ -91,7 +94,9 @@ const Track = () => {
 
       {selectedTask && (
         <div className="task-details">
-          <h3>Task Ending on {selectedTask.endDate.toLocaleDateString()}</h3>
+          <h3>
+            Task Ending on {new Date(selectedTask.endDate).toLocaleDateString()}
+          </h3>
           <p>
             <strong>Task:</strong> {selectedTask.name}
           </p>
@@ -100,13 +105,19 @@ const Track = () => {
 
       <div className="task-list">
         <h3>All Tasks</h3>
-        <ul>
-          {sampleTasks.map((task) => (
-            <li key={task.id} onClick={() => setSelectedTask(task)}>
-              {task.name} - Ends: {task.endDate.toLocaleDateString()}
-            </li>
-          ))}
-        </ul>
+
+        {Tasks.length === 0 ? (
+          <div>No Tasks Found</div>
+        ) : (
+          <ul>
+            {Tasks.map((task) => (
+              <li key={task.id} onClick={() => setSelectedTask(task)}>
+                {task.name} - Ends:{" "}
+                {new Date(task.endDate).toLocaleDateString()}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

@@ -1,9 +1,44 @@
 import { useNavigate } from "react-router-dom";
 import "./CSS/SignUp.css";
+import { useState } from "react";
+import { useStore } from "../useStore";
 const SignUp = () => {
   const navigate = useNavigate();
   const handleSignin = () => {
     navigate("/signin");
+  };
+  const { addUser, setCurrentUser } = useStore();
+  const [Email, setEmail] = useState("");
+  const [Password, setPassword] = useState("");
+  const [ConfirmPassword, setConfirmPassword] = useState("");
+  const [DisplayName, setDisplayName] = useState("");
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    if (Password !== ConfirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+    if (Email === "" || Password === "" || ConfirmPassword === "") {
+      alert("Please fill in all fields");
+      return;
+    }
+    if (DisplayName === "") {
+      alert("Please enter a display name");
+      return;
+    }
+    const newUser = {
+      name: DisplayName,
+      email: Email,
+      password: Password,
+      role: "user",
+    };
+    addUser(newUser);
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setDisplayName("");
+    setCurrentUser(newUser);
+    navigate("/");
   };
   return (
     <>
@@ -11,16 +46,38 @@ const SignUp = () => {
         <img src="logo.png" width="80px" className="logo" />
         <form className="signup-form">
           <label>Display name</label>
-          <input type="text" className="input-form" />
+          <input
+            type="text"
+            className="input-form"
+            onChange={(e) => setDisplayName(e.target.value)}
+            value={DisplayName}
+          />
           <label>Email</label>
-          <input type="text" className="input-form" />
+          <input
+            type="email"
+            className="input-form"
+            onChange={(e) => setEmail(e.target.value)}
+            value={Email}
+          />
 
           <label>Password</label>
 
-          <input type="password" className="input-form" />
+          <input
+            type="password"
+            className="input-form"
+            onChange={(e) => setPassword(e.target.value)}
+            value={Password}
+          />
           <label>Confirm Password</label>
-          <input type="password" className="input-form" />
-          <button type="submit">Create account</button>
+          <input
+            type="password"
+            className="input-form"
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            value={ConfirmPassword}
+          />
+          <button type="submit" onClick={handleSignUp}>
+            Create account
+          </button>
 
           <div className="have-account">
             <p
@@ -29,19 +86,11 @@ const SignUp = () => {
                 opacity: 0.5,
                 "margin-top": "15px",
                 "margin-bottom": "15px",
-              }}
-            >
-              Already have an account?
-            </p>
-            <p
-              style={{
-                textAlign: "center",
-                "font-size": "18px",
                 cursor: "pointer",
               }}
               onClick={handleSignin}
             >
-              SignIn
+              Already have an account?
             </p>
           </div>
         </form>

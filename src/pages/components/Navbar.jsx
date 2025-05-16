@@ -1,12 +1,19 @@
 import { Link, useNavigate } from "react-router-dom";
 import "../CSS/NavBar.css";
+import { useStore } from "../../useStore";
 
 const NavBar = () => {
+  const { clearUser, currentuser } = useStore();
   const navigate = useNavigate();
-  const handleSignip = () => {
+  const handleSignin = () => {
     navigate("/signin");
   };
+  console.log(currentuser);
   const handleHome = () => {
+    navigate("/");
+  };
+  const logout = () => {
+    clearUser();
     navigate("/");
   };
   return (
@@ -18,14 +25,24 @@ const NavBar = () => {
         onClick={handleHome}
       />
       <div className="navbar-links">
-        <Link className="link" to="/track">
-          Track
-        </Link>
-        <Link className="link" to="/academictasks">
-          Academic Tasks
-        </Link>
-        <Link className="link">Contact us</Link>
-        <button onClick={handleSignip}>SignUp</button>
+        {currentuser ? (
+          <>
+            <Link className="link" to="/track">
+              Track
+            </Link>
+            <Link className="link" to="/academictasks">
+              Academic Tasks
+            </Link>
+          </>
+        ) : (
+          <></>
+        )}
+
+        {currentuser ? (
+          <button onClick={logout}>Logout</button>
+        ) : (
+          <button onClick={handleSignin}>SignIn</button>
+        )}
       </div>
     </div>
   );
