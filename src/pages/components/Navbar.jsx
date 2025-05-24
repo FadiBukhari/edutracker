@@ -25,19 +25,23 @@ const NavBar = () => {
         onClick={handleHome}
       />
       <div className="navbar-links">
-        {currentuser ? (
+        {currentuser?.role == "parent" || currentuser?.role == "user" ? (
           <>
             <Link className="link" to="/track">
               Track
             </Link>
             <Link className="link" to="/academictasks">
-              Academic Tasks
+              Tasks
             </Link>
           </>
         ) : (
           <></>
         )}
-
+        {currentuser?.role === "admin" && (
+          <Link className="link" to="/admin">
+            Manage Users
+          </Link>
+        )}
         {currentuser ? (
           <button onClick={logout}>Logout</button>
         ) : (

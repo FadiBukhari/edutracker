@@ -2,10 +2,11 @@
 .academic-task-viewer {
   font-family: Arial, sans-serif;
   max-width: 800px;
-  margin: 232px auto;
+  margin: 80px auto;
   border: solid 1px #171616;
   border-radius: 10px;
   padding: 60px;
+  margin-bottom: 400px;
 }
 .academic-task-viewer {
   text-align: center;

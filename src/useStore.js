@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { format } from "date-fns";
 
-// Create a store for tasks
 export const useStoreCategories = create()(
   persist(
     (set) => ({
@@ -76,8 +75,8 @@ export const useStoreCategories = create()(
         })),
     }),
     {
-      name: "categories-storage", // unique key for localStorage
-      // Optional: only persist certain fields
+      name: "categories-storage",
+
       partialize: (state) => ({ categories: state.categories }),
     }
   )
@@ -86,12 +85,7 @@ export const useStoreCategories = create()(
 export const useStore = create()(
   persist(
     (set) => ({
-      currentuser: {
-        name: "Fadi",
-        email: "demo@demo.com",
-        password: "1234",
-        role: "parent",
-      },
+      currentuser: {},
       users: [
         {
           name: "Fadi",
@@ -104,6 +98,13 @@ export const useStore = create()(
           email: "demoe@demo.com",
           password: "12345",
           role: "user",
+          currentMood: null,
+        },
+        {
+          name: "Mohammad",
+          email: "demoe@demoe.com",
+          password: "123456",
+          role: "admin",
         },
       ],
       addUser: (userData) =>
@@ -112,10 +113,21 @@ export const useStore = create()(
         })),
       setCurrentUser: (user) => set({ currentuser: user }),
       clearUser: () => set({ currentuser: null }),
+      setMood: (mood) =>
+        set((state) => ({
+          currentuser: {
+            ...state.currentuser,
+            currentMood: mood,
+          },
+          users: state.users.map((user) =>
+            user.email === state.currentuser.email
+              ? { ...user, currentMood: mood }
+              : user
+          ),
+        })),
     }),
     {
-      name: "user-storage", // unique key for localStorage
-      // Optional: only persist certain fields
+      name: "user-storage",
       partialize: (state) => ({
         currentuser: state.currentuser,
         users: state.users,

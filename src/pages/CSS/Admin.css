@@ -1,0 +1,12 @@
+.admin-page {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  width: 800px;
+  margin: 150px auto;
+  text-align: center;
+  justify-content: center;
+  gap: 25px;
+  align-items: center;
+  margin-bottom: 350px;
+}

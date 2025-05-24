@@ -1,12 +1,42 @@
 import "./CSS/Home.css";
 import { Link } from "react-router";
+import { useStore } from "../useStore";
 
 const Home = () => {
+  const { currentuser, setMood, updateUser } = useStore();
+  const handleMoodChange = (mood) => {
+    setMood(mood);
+    updateUser(currentuser);
+  };
+
+  console.log(currentuser);
+  const displayEmoji = (mood) => {
+    switch (mood) {
+      case "very_sad":
+        return "😞";
+      case "neutral":
+        return "😟";
+      case "okay":
+        return "😑";
+      case "happy":
+        return "🙂";
+      case "excited":
+        return "😁";
+      default:
+        return "";
+    }
+  };
   return (
     <section className="home-container">
       <div className="home-content">
         <h1 className="home-header">
-          <span className="header-highlight">Edu</span> Tracker
+          {currentuser?.role == "user" || currentuser?.role == "parent" ? (
+            <span>
+              Welcome {currentuser?.role == "user" ? "Student" : "Parent"}
+            </span>
+          ) : (
+            <span className="header-highlight">EduTracker</span>
+          )}
         </h1>
         <p className="home-description">
           We build performant, accessible, and beautiful web applications
@@ -19,19 +49,50 @@ const Home = () => {
             Get Started
           </Link>
         </div>
+        {currentuser?.role == "user" && (
+          <div className="mood-selector">
+            <span className="mood-label">How are you feeling today?</span>
 
-        <div className="features-grid">
-          <div className="feature-card">
-            <div className="feature-icon">🚀</div>
-            <h3>Fast Performance</h3>
-            <p>Optimized for speed and smooth user experience</p>
+            <div className="emoji-selection">
+              {currentuser?.currentMood ? (
+                displayEmoji(currentuser.currentMood)
+              ) : (
+                <>
+                  <button
+                    className="mood-button"
+                    onClick={() => handleMoodChange("very_sad")}
+                  >
+                    😞
+                  </button>
+                  <button
+                    className="mood-button"
+                    onClick={() => handleMoodChange("neutral")}
+                  >
+                    😟
+                  </button>
+                  <button
+                    className="mood-button"
+                    onClick={() => handleMoodChange("okay")}
+                  >
+                    😑
+                  </button>
+                  <button
+                    className="mood-button"
+                    onClick={() => handleMoodChange("happy")}
+                  >
+                    🙂
+                  </button>
+                  <button
+                    className="mood-button"
+                    onClick={() => handleMoodChange("excited")}
+                  >
+                    😁
+                  </button>
+                </>
+              )}
+            </div>
           </div>
-          <div className="feature-card">
-            <div className="feature-icon">🔒</div>
-            <h3>Secure</h3>
-            <p>Built with security best practices</p>
-          </div>
-        </div>
+        )}
       </div>
 
       <div className="home-image-container">

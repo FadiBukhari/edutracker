@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { format, parseISO } from "date-fns";
-import "./CSS/AcademicTasks.css"; // Assuming you have a CSS file for styling
+import "./CSS/AcademicTasks.css";
 import { useStore, useStoreCategories } from "../useStore";
 const AcademicTasks = () => {
-  // State for categories and tasks
   const {
     categories,
     addCategory,
@@ -20,9 +19,8 @@ const AcademicTasks = () => {
     endDate: format(new Date(), "yyyy-MM-dd"),
   });
   const [activeCategory, setActiveCategory] = useState(null);
-  const [filter, setFilter] = useState("all"); // 'all', 'completed', 'pending'
+  const [filter, setFilter] = useState("all");
 
-  // Add new category
   const addCategoryTrim = () => {
     if (newCategoryName.trim()) {
       const newCategory = {
@@ -35,7 +33,7 @@ const AcademicTasks = () => {
     }
   };
   console.log(categories[0]?.tasks);
-  // Add new task
+
   const addTaskTrim = () => {
     if (newTask.name.trim()) {
       const task = {
@@ -58,7 +56,7 @@ const AcademicTasks = () => {
       setActiveCategory(null);
     }
   };
-  // Filter tasks based on completion status
+
   const filteredTasks = (tasks) => {
     if (!tasks) return [];
     switch (filter) {
@@ -77,9 +75,8 @@ const AcademicTasks = () => {
     <>
       {currentuser?.role === "parent" ? (
         <div className="academic-task-viewer">
-          <h2>Academic Task Viewer</h2>
+          <h2>Task Viewer</h2>
 
-          {/* Category Management */}
           <div className="category-section">
             <h3>Categories</h3>
 
@@ -97,8 +94,6 @@ const AcademicTasks = () => {
               ))}
             </div>
           </div>
-
-          {/* Task Management */}
 
           {activeCategory && (
             <div className="task-section">
@@ -150,9 +145,8 @@ const AcademicTasks = () => {
         </div>
       ) : (
         <div className="academic-task-manager">
-          <h2>Academic Task Manager</h2>
+          <h2> Task Manager</h2>
 
-          {/* Category Management */}
           <div className="category-section">
             <h3>Categories</h3>
             <div className="add-category">
@@ -188,8 +182,6 @@ const AcademicTasks = () => {
               ))}
             </div>
           </div>
-
-          {/* Task Management */}
 
           {activeCategory && (
             <div className="task-section">
@@ -241,7 +233,6 @@ const AcademicTasks = () => {
                 )}
               </div>
 
-              {/* Task List */}
               <div className="task-list">
                 <div key={category.id} className="category-tasks">
                   <h4>{category.name}</h4>

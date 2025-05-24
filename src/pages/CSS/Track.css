@@ -106,3 +106,60 @@
 .react-calendar__tile--now:enabled {
   background-color: black;
 }
+.track-container {
+  display: flex;
+  padding: 20px;
+  justify-content: center;
+  gap: 50px;
+  margin-bottom: 150px;
+}
+.task-calendar-container {
+  margin: 0;
+}
+.info-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 300px;
+  padding: 50px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.719);
+}
+.tip-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 300px;
+  padding: 20px;
+  background-color: #ebecec;
+  align-items: center;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  margin-bottom: 50px;
+}
+.tip-title {
+  border-bottom: solid 2px #2e2f3193;
+  margin-bottom: 10px;
+}
+.mood-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 250px;
+
+  padding: 20px;
+  background-color: white;
+  border: solid 1px #ccc;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+.mood-button {
+  background-color: transparent;
+}
+.emoji-selection {
+  display: flex;
+  flex-direction: row;
+}

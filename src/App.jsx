@@ -7,6 +7,7 @@ import Layout from "./pages/Layout";
 import SignUp from "./pages/SignUp";
 import AcademicTasks from "./pages/AcademicTasks";
 import Track from "./pages/Track";
+import Admin from "./pages/Admin";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/academictasks" element={<AcademicTasks />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/admin" element={<Admin />} />
         </Route>
       </Routes>
     </Router>
