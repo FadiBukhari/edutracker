@@ -43,12 +43,13 @@ const Home = () => {
           tailored to your business needs. Our solutions help you stand out in
           the digital landscape.
         </p>
-
-        <div className="button-group">
-          <Link className="cta-button primary" to="/signin">
-            Get Started
-          </Link>
-        </div>
+        {!currentuser && (
+          <div className="button-group">
+            <Link className="cta-button primary" to="/signin">
+              Get Started
+            </Link>
+          </div>
+        )}
         {currentuser?.role == "user" && (
           <div className="mood-selector">
             <span className="mood-label">How are you feeling today?</span>

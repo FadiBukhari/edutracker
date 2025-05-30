@@ -8,6 +8,10 @@ import SignUp from "./pages/SignUp";
 import AcademicTasks from "./pages/AcademicTasks";
 import Track from "./pages/Track";
 import Admin from "./pages/Admin";
+import PomodoroTimer from "./pages/PomodoroTimer";
+import ContactUs from "./pages/Contactus";
+import RequestRoleForm from "./pages/RequestRoleForm";
+import ManageParentRequests from "./pages/ManageRequests";
 
 function App() {
   return (
@@ -20,6 +24,10 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/timer" element={<PomodoroTimer />} />
+          <Route path="/contactus" element={<ContactUs />} />
+          <Route path="/requestRole" element={<RequestRoleForm />} />
+          <Route path="/managerequests" element={<ManageParentRequests />} />
         </Route>
       </Routes>
     </Router>
