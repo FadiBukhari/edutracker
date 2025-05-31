@@ -12,6 +12,7 @@ import PomodoroTimer from "./pages/PomodoroTimer";
 import ContactUs from "./pages/Contactus";
 import RequestRoleForm from "./pages/RequestRoleForm";
 import ManageParentRequests from "./pages/ManageRequests";
+import MoodHistory from "./pages/MoodHistory";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/contactus" element={<ContactUs />} />
           <Route path="/requestRole" element={<RequestRoleForm />} />
           <Route path="/managerequests" element={<ManageParentRequests />} />
+          <Route path="/mood" element={<MoodHistory />} />
         </Route>
       </Routes>
     </Router>

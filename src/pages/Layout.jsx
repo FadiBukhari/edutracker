@@ -1,8 +1,11 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import NavBar from "./components/Navbar";
 import "./CSS/Layout.css";
+import { useStore } from "../useStore";
 const Layout = () => {
   const location = useLocation();
+  const { currentuser } = useStore();
+
   console.log(location.pathname === "/signin");
   return (
     <>
@@ -18,7 +21,18 @@ const Layout = () => {
             <div className="last-section-content">
               <img src="logo.png" width="100px" className="logo" />
               <div className="toho">
-                <span>About us</span>
+                {currentuser?.role === "user" && (
+                  <Link className="link" to="/requestRole">
+                    Request Role
+                  </Link>
+                )}
+                {currentuser && currentuser?.role !== "admin" ? (
+                  <Link className="link" to="/contactus">
+                    Contact Us
+                  </Link>
+                ) : (
+                  <></>
+                )}
                 <span>Privacy policy</span>
                 <span>Terms of use</span>
               </div>

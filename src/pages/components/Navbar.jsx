@@ -33,15 +33,14 @@ const NavBar = () => {
             <Link className="link" to="/academictasks">
               Tasks
             </Link>
+            <Link className="link" to="/mood">
+              History
+            </Link>
           </>
         ) : (
           <></>
         )}
-        {currentuser?.role === "user" && (
-          <Link className="link" to="/requestRole">
-            Request Role
-          </Link>
-        )}
+
         {currentuser?.role === "user" && (
           <Link className="link" to="/timer">
             Pomodoro Timer
@@ -58,13 +57,7 @@ const NavBar = () => {
             </Link>
           </>
         )}
-        {currentuser && currentuser?.role !== "admin" ? (
-          <Link className="link" to="/contactus">
-            Contact Us
-          </Link>
-        ) : (
-          <></>
-        )}
+
         {currentuser ? (
           <button onClick={logout}>Logout</button>
         ) : (
